@@ -25,8 +25,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
 import java.io.*
 import java.text.SimpleDateFormat
@@ -34,6 +34,7 @@ import java.util.*
 
 
 class FirstFragment : Fragment() {
+    private var resultUri: Uri? = null
     private val IMAGE_GALLERY_REQUEST_CODE: Int =2001
     private var uri: Uri?= null
     private lateinit var currentImagePath: String
@@ -105,11 +106,17 @@ class FirstFragment : Fragment() {
 
         ib_crop.setOnClickListener{
             imageCrop(uri)
-            Navigation.findNavController(view).navigate(R.id.navigate_to_secondFragment)
-
+            navigateFun(it)
 
         }
 
+
+    }
+
+    private fun navigateFun(view: View) {
+        val action = FirstFragmentDirections.navigateToSecondFragment(resultUri.toString())
+        view.findNavController().navigate(action)
+//        Navigation.findNavController(view).navigate(R.id.navigate_to_secondFragment)
 
     }
 
@@ -125,7 +132,7 @@ class FirstFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "onActivityResult: $ ")
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            val resultUri = UCrop.getOutput(data!!)
+            resultUri = UCrop.getOutput(data!!)
             Log.d("crop", "onActivityResult:$resultUri ")
             if(resultUri!=null){
                 iv_img.setImageURI(resultUri)

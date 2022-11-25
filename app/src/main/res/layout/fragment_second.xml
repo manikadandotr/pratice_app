@@ -8,15 +8,16 @@
     tools:context=".SecondFragment">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_croped"
         android:layout_width="0dp"
         android:layout_height="400dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ib_earse"
         tools:src="@tools:sample/avatars" />
 
     <EditText
@@ -30,7 +31,7 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_croped" />
 
     <Button
         android:id="@+id/generateBtn"
@@ -42,4 +43,16 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_keyword" />
+
+    <ImageView
+        android:id="@+id/ib_earse"
+        android:layout_width="42dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="349dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/earse_icon_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/iv_croped"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

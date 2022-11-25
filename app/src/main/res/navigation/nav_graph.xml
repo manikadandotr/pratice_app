@@ -24,6 +24,9 @@
             android:id="@+id/navigate_to_thirdFragment"
             app:destination="@id/thirdFragment"
             app:enterAnim="@android:anim/slide_out_right" />
+        <argument
+            android:name="uriInString"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/thirdFragment"
@@ -34,5 +37,8 @@
             android:id="@+id/navigate_to_firstFragment"
             app:destination="@id/firstFragment"
             app:enterAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="keyword_data"
+            app:argType="string" />
     </fragment>
 </navigation>
