@@ -8,4 +8,11 @@
     <external-files-path
         name="my_root_images"
         path="/" />
+
+<cache-path
+    name="cached_files"
+    path="." />
+<files-path
+    name="images"
+    path="." />
 </paths>
