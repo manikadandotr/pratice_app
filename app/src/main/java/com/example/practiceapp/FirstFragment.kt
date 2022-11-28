@@ -21,11 +21,13 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_first.view.*
 import java.io.*
@@ -47,11 +49,6 @@ class FirstFragment : Fragment() {
 
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,12 +56,6 @@ class FirstFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view =inflater.inflate(R.layout.fragment_first, container, false)
-        iv_img =view.findViewById<ImageView>(R.id.iv)
-        ib_crop =view.findViewById<ImageButton>(R.id.ib_crop)
-
-
-
-
         return view
     }
 
@@ -73,6 +64,8 @@ class FirstFragment : Fragment() {
 
 //        val myDir = File(requireActivity().filesDir.absolutePath)
 
+        iv_img =view.findViewById<ImageView>(R.id.iv)
+        ib_crop =view.findViewById<ImageButton>(R.id.ib_crop)
 
 
         enableRuntimePermission()
@@ -105,8 +98,17 @@ class FirstFragment : Fragment() {
         }
 
         ib_crop.setOnClickListener{
+            if (uri != null)
             imageCrop(uri)
-            navigateFun(it)
+            Log.d(TAG, "onViewCreated: $resultUri")
+            if(resultUri!=null)
+                navigateFun(it)
+
+//
+//            val action = FirstFragmentDirections.navigateToSecondFragment(resultUri.toString())
+
+//            view.findNavController().navigate(action)
+
 
         }
 
@@ -115,6 +117,7 @@ class FirstFragment : Fragment() {
 
     private fun navigateFun(view: View) {
         val action = FirstFragmentDirections.navigateToSecondFragment(resultUri.toString())
+//        action.setUriInString(resultUri.toString())
         view.findNavController().navigate(action)
 //        Navigation.findNavController(view).navigate(R.id.navigate_to_secondFragment)
 
@@ -130,16 +133,18 @@ class FirstFragment : Fragment() {
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d(TAG, "onActivityResult: $ ")
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            resultUri = UCrop.getOutput(data!!)
+//        Log.d(TAG, "onActivityResult: $ ")
+//        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            resultUri = data?.let { UCrop.getOutput(it) }
+//            resultUri = UCrop.getOutput(data!!)
             Log.d("crop", "onActivityResult:$resultUri ")
             if(resultUri!=null){
                 iv_img.setImageURI(resultUri)
+                view?.let { navigateFun(it) }
             }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            val cropError = UCrop.getError(data!!)
-        }
+//        } else if (resultCode == UCrop.RESULT_ERROR) {
+//            val cropError = UCrop.getError(data!!)
+//        }
     }
 //    fun savefile(sourceuri: Uri): Uri {
 //        val sourceFilename: String? = sourceuri.getPath()
@@ -202,15 +207,16 @@ class FirstFragment : Fragment() {
     }
     var galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-//            if(result.data != null && result.data!!.data == null){
+//            if(result.data != null || result.data!!.data == null){
                 val image = result.data!!.data
             uri=image
             if(image != null )
             {
                 Log.d("aaa", image.toString())
-                iv_img.setImageURI(image)
-//                view?.iv?.setImageURI(image)
-            //            view?.iv?.setImageURI(image)
+//                resultUri=uri
+//                iv_img.setImageURI(image)
+                view?.iv?.setImageURI(image)
+                        view?.iv?.setImageURI(image)
             }
 //                Log.d("aaa", image.toString())
 //                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
